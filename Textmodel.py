@@ -85,22 +85,46 @@ with open("tokenizer.json", "w") as f:
 
 # Map emotions to genres
 emotion_to_genre = {
-    "joy": "comedy",
+    "admiration": "biography",
+    "amusement": "comedy",
     "anger": "action",
-    "sadness": "drama",
+    "annoyance": "thriller",
+    "approval": "family",
+    "caring": "drama",
+    "confusion": "mystery",
+    "curiosity": "documentary",
+    "desire": "romance",
+    "disappointment": "drama",
+    "disapproval": "crime",
+    "disgust": "horror",
+    "embarrassment": "comedy",
+    "excitement": "adventure",
     "fear": "horror",
+    "gratitude": "family",
+    "grief": "tragedy",
+    "joy": "comedy",
     "love": "romance",
-    # Add more mappings based on your requirements
+    "nervousness": "thriller",
+    "optimism": "fantasy",
+    "pride": "sports",
+    "realization": "documentary",
+    "relief": "family",
+    "remorse": "tragedy",
+    "sadness": "drama",
+    "surprise": "mystery",
+    "neutral": "general",
 }
+
 
 # Test model prediction
 def predict_genre(input_text):
     sequence = tokenizer.texts_to_sequences([input_text])
     padded_sequence = pad_sequences(sequence, maxlen=max_length, padding="post", truncating="post")
     prediction = model.predict(padded_sequence)
-    predicted_emotion = label_encoder.inverse_transform([np.argmax(prediction)])[0]
+    predicted_emotion_index = np.argmax(prediction)
+    predicted_emotion = label_encoder.inverse_transform([predicted_emotion_index])[0]
+    print(f"Predicted Emotion: {predicted_emotion}")  # Debug line
     return emotion_to_genre.get(predicted_emotion, "unknown")
-
 
 # Example
 input_text = "I am so happy today!"
